@@ -25,9 +25,9 @@ public class SetupDatabase
         }
     }
 
-    public static void CreateTable(List<string> columns)
+    public static void CreateTable(string name, List<string> columns)
     {
-        string columnsFormatted = string.Join("", columns.Select(c => $"\"{c}\" TEXT NULL, \n").ToList());
+        string columnsFormatted = string.Join(", \n", columns.Select(c => $"\"{c}\" TEXT NULL").ToList());
 
         try
         {
@@ -36,10 +36,8 @@ public class SetupDatabase
             connection.Open();
 
             SqliteCommand cmd = connection.CreateCommand();
-            cmd.CommandText = @$"CREATE TABLE IF NOT EXISTS ""Excel"" (
-	                        ""IdDb""	INTEGER NOT NULL,
+            cmd.CommandText = @$"CREATE TABLE IF NOT EXISTS ""{name}"" (
 	                        {columnsFormatted}
-	                        PRIMARY KEY(""IdDb"" AUTOINCREMENT)
                             );";
             cmd.ExecuteNonQuery();
 

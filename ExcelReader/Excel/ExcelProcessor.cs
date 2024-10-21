@@ -1,4 +1,7 @@
 ﻿
+using OfficeOpenXml;
+using System.IO;
+
 namespace ExcelReader;
 
 public class ExcelProcessor
@@ -14,36 +17,40 @@ public class ExcelProcessor
 
     public void Run()
     {
-        var columns = _excelReader.GetColumns(_fileInfo);
-        SetupDatabase.CreateTable(columns);
-
-        // TODO: Probar Excel con valores nulos, filas y campos
-        var columnValues = _excelReader.GetData(_fileInfo);
-
-        var rows = new List<Dictionary<string, string>>();
-
-        var firstRow = columnValues.Values.FirstOrDefault();
-        if (firstRow == null) return;
-        int rowCount = firstRow.Count;
-
-        for (int i = 0; i < rowCount; i++)
+        int worksheetsCount = _excelReader.GetWorkSheetsCount(_fileInfo);
+        for (int i = 0; i < worksheetsCount; i++)
         {
-            var row = new Dictionary<string, string>();
-            foreach (var column in columns)
-            { 
-                row.Add(column, columnValues[column][i]);
+            var columns = _excelReader.GetColumns(_fileInfo, i);
+            string worksheetName = _excelReader.GetWorkSheetName(_fileInfo, i);
+            SetupDatabase.CreateTable(worksheetName, columns);
+
+            // TODO: Probar Excel con valores nulos, filas y campos
+            var columnValues = _excelReader.GetData(_fileInfo, i);
+
+            var rows = new List<Dictionary<string, string>>();
+
+            var firstRow = columnValues.Values.FirstOrDefault();
+            if (firstRow == null) return;
+            int rowCount = firstRow.Count;
+
+            for (int r = 0; r < rowCount; r++)
+            {
+                var row = new Dictionary<string, string>();
+                foreach (var column in columns)
+                { 
+                    row.Add(column, columnValues[column][r]);
+                }
+                rows.Add(row);
             }
-            rows.Add(row);
-        }
 
-        // TODO: Check empty rows
-        foreach (var row in rows)
-        {
-            ExcelController.InsertData(row, GlobalConfig.ConnectionString);
+            // TODO: Check empty rows
+            foreach (var row in rows)
+            {
+                ExcelController.InsertData(worksheetName, row, GlobalConfig.ConnectionString);
+            }
         }
         
         // TODO: App
-        //InsertData();
         //ReadData();
     }
 }
