@@ -25,7 +25,7 @@ public class SetupDatabase
         }
     }
 
-    public static void CreateTable(string name, List<string> columns)
+    public static bool CreateTable(string name, List<string> columns)
     {
         string columnsFormatted = string.Join(", \n", columns.Select(c => $"\"{c}\" TEXT NULL").ToList());
 
@@ -48,6 +48,8 @@ public class SetupDatabase
         {
 
             Console.WriteLine($"An error ocurred: {ex.Message}");
+            return false;
         }
+        return true;
     }
 }
