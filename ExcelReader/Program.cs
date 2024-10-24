@@ -6,7 +6,7 @@ ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 Startup.StartApplication();
 
-ExcelProcessor excelProcessor = new ExcelProcessor("C:\\Users\\ErNaN\\Downloads\\SaleData.xlsx");
+ExcelProcessor excelProcessor = new ExcelProcessor(GlobalConfig.FilePath!);
 excelProcessor.Run();
 
 
