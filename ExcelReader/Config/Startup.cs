@@ -24,6 +24,10 @@ public class Startup
         string dbFile = config.GetValue<string>("DatabaseFileName")
             ?? throw new InvalidOperationException("You must provide a DatabaseFileName in the appsettings.json file.");
 
+        string filePath = config.GetValue<string>("ExcelFilePath")
+            ?? throw new InvalidOperationException("You must provide a ExcelFilePath in the appsettings.json file.");
+        GlobalConfig.FilePath = filePath;
+
         SetupDatabase.ResetDatabase(dbFile);
     }
 }

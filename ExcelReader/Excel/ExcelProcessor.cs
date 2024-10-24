@@ -35,11 +35,12 @@ public class ExcelProcessor
             InsertData(columnValues, tableName);
 
             // Console output for the data
-            OutputRenderer.ShowTable(columnValues, tableName);
+            //OutputRenderer.ShowTable(columnValues, tableName);
+            AnsiConsole.WriteLine();
         }
-        
-        // TODO: App
-        //ReadData();
+
+        ExcelMenuHandler excelMenuHandler = new (_excelReader.GetWorkSheetName(_fileInfo, 0));
+        excelMenuHandler.Display();
     }
 
     private Dictionary<string, List<string>> GetColumnValues(int worksheetIndex)
