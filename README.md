@@ -32,18 +32,20 @@ xls file that can be read by your application.
 
 - Console-based UI to show the application status:
 
-  - imagelink
+  - ![image](https://github.com/user-attachments/assets/97daaf41-2bef-465d-9cf0-ba2831ab59ca)
 
 - Console-based UI to interact with the Excel
 
-  - imageLinks
+  - ![image](https://github.com/user-attachments/assets/1f5e2777-33d5-46cb-9313-d9c656980254)
+  - ![image](https://github.com/user-attachments/assets/f7f41de6-e3aa-4d39-8f67-60509caa8f79)
+  - ![image](https://github.com/user-attachments/assets/cd5442d8-34be-455d-9862-2469eb7b18c7)
 
 - Insert rows and save the Excel:
 
   - You can insert a row in the worksheet selected.
-  - imageLink
+  - ![image](https://github.com/user-attachments/assets/bd07c023-d55a-4e11-9dbd-3b5cb8323255)
   - You can save the Excel by entering a path.
-  - imageLink
+  - ![image](https://github.com/user-attachments/assets/670241bd-c333-456b-ba74-25622d8063d9)
 
 ## Challenges
 
@@ -68,4 +70,6 @@ xls file that can be read by your application.
 ##  Resources used
 
   - StackOverflow posts
-  - links
+  - [EPPlus Documentation](https://epplussoftware.com/en/Developers/)
+  - [SQLite Forum retrieving columns](https://www.sqlite.org/forum/info/a5fa4f43622453de)
+  - [Dapper Documentation](https://www.learndapper.com/)
