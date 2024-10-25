@@ -1,5 +1,5 @@
-﻿using OfficeOpenXml.Style;
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Spectre.Console;
 
 namespace ExcelReader;
@@ -9,7 +9,7 @@ public class ExcelWriter
     private Excel _excel;
     // TODO: Ask to the user, pass as parameter, check for invalid paths like the path for the main Excel,
     // PathValidator class
-    private string _fileName = "C:\\Users\\ErNaN\\Downloads\\SaleDataTest.xlsx";
+    private string _fileName;
     public ExcelWriter(Excel excel, string fileName)
     {
         _excel = excel;
@@ -25,7 +25,7 @@ public class ExcelWriter
     {
         // Creating an instance 
         // of ExcelPackage 
-        ExcelPackage excel = new ();
+        ExcelPackage excel = new();
 
         // Iterate over every WorkSheet
         foreach (var ws in _excel.WorkSheets)
