@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExcelReader;
 
@@ -17,7 +12,7 @@ public class Startup
 
         IConfiguration config = builder.Build();
 
-        string connectionString = config.GetConnectionString("Sqlite") 
+        string connectionString = config.GetConnectionString("Sqlite")
             ?? throw new InvalidOperationException("You must provide a Sqlite Connection String in the appsettings.json file.");
         GlobalConfig.InitializeConnectionString(connectionString);
 
@@ -26,6 +21,9 @@ public class Startup
 
         string filePath = config.GetValue<string>("ExcelFilePath")
             ?? throw new InvalidOperationException("You must provide a ExcelFilePath in the appsettings.json file.");
+        if (!PathValidator.ExistsExcelFilePath(filePath))
+            throw new InvalidOperationException("You must provide a valid path in the appsettings.json file.");
+
         GlobalConfig.FilePath = filePath;
 
         SetupDatabase.ResetDatabase(dbFile);

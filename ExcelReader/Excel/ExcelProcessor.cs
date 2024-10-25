@@ -1,20 +1,11 @@
-﻿
-using OfficeOpenXml;
-using Spectre.Console;
-using System.IO;
+﻿using Spectre.Console;
 
 namespace ExcelReader;
 
-public class ExcelProcessor
+public class ExcelProcessor(string excelPath)
 {
-    private FileInfo _fileInfo;
-    private ExcelReader _excelReader;
-
-    public ExcelProcessor(string excelPath)
-    {
-        _fileInfo = new FileInfo(excelPath);
-        _excelReader = new ExcelReader();
-    }
+    private readonly FileInfo _fileInfo = new FileInfo(excelPath);
+    private readonly ExcelReader _excelReader = new ExcelReader();
 
     public void Run()
     {
@@ -39,7 +30,7 @@ public class ExcelProcessor
             AnsiConsole.WriteLine();
         }
 
-        ExcelMenuHandler excelMenuHandler = new (_excelReader.GetWorkSheetName(_fileInfo, 0));
+        ExcelMenuHandler excelMenuHandler = new(_excelReader.GetWorkSheetName(_fileInfo, 0));
         excelMenuHandler.Display();
     }
 

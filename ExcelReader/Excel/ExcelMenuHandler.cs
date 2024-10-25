@@ -1,20 +1,11 @@
 ﻿using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExcelReader;
 
-public class ExcelMenuHandler
+public class ExcelMenuHandler(string currentWorkSheet)
 {
-    private string _currentWorkSheet; 
+    private string _currentWorkSheet = currentWorkSheet;
 
-    public ExcelMenuHandler(string currentWorkSheet)
-    {
-        _currentWorkSheet = currentWorkSheet;
-    }
     public void Display()
     {
         MenuPresentation.MenuDisplayer<ExcelMenuOptions>(() => $"[green]Excel Menu - {_currentWorkSheet}[/]", HandleMenuOptions);
@@ -67,10 +58,22 @@ public class ExcelMenuHandler
             });
         }
 
-        Excel excel = new () { WorkSheets = workSheets };
+        Excel excel = new() { WorkSheets = workSheets };
 
-        ExcelWriter excelWriter = new(excel);
-        if(excelWriter.Write())
+        string userPath;
+        bool continueAsking;
+        do
+        {
+            TextPrompt<string> prompt = new TextPrompt<string>($"Enter a path to save the Excel: ")
+                .DefaultValue(Path.Combine(Path.GetDirectoryName(GlobalConfig.FilePath)!, "SavedExcel.xlsx"));
+            userPath = AnsiConsole.Prompt(prompt);
+
+            continueAsking = !PathValidator.IsValidExcelFilePath(userPath);
+            if (continueAsking) AnsiConsole.MarkupLine("[red]Wrong input.[/]");
+        } while (continueAsking);
+
+        ExcelWriter excelWriter = new(excel, userPath);
+        if (excelWriter.Write())
             AnsiConsole.MarkupLine($"[green]Excel created![/]");
         else
             AnsiConsole.MarkupLine($"[red]Error creating the Excel file[/]");
@@ -82,13 +85,13 @@ public class ExcelMenuHandler
         var columns = ExcelController.GetColumnsFromTable(_currentWorkSheet, GlobalConfig.ConnectionString!);
         var row = new Dictionary<string, string>();
 
-        foreach ( var column in columns )
+        foreach (var column in columns)
         {
             var prompt = new TextPrompt<string>($"Enter {column}:");
             row.Add(column, AnsiConsole.Prompt(prompt));
         }
 
-        if(ExcelController.InsertData(_currentWorkSheet, row, GlobalConfig.ConnectionString!))
+        if (ExcelController.InsertData(_currentWorkSheet, row, GlobalConfig.ConnectionString!))
             AnsiConsole.MarkupLine($"[green]Row inserted![/]");
         else
             AnsiConsole.MarkupLine($"[red]Error inserting the row[/]");
@@ -113,15 +116,15 @@ public class ExcelMenuHandler
         };
         OutputRenderer.ShowTable(worksheetsDictionary, "WorkSheets");
 
-        bool continueAsking = true;
-        string userInput = string.Empty;
+        bool continueAsking;
+        string userInput;
         do
         {
             var prompt = new TextPrompt<string>("Enter a WorkSheet");
             userInput = AnsiConsole.Prompt(prompt);
 
             continueAsking = !worksheets.Contains(userInput, StringComparer.InvariantCultureIgnoreCase);
-            if (!continueAsking) AnsiConsole.MarkupLine("[red]Wrong input.[/]");
+            if (continueAsking) AnsiConsole.MarkupLine("[red]Wrong input.[/]");
         } while (continueAsking);
 
         _currentWorkSheet = userInput;

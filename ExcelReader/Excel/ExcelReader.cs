@@ -1,12 +1,11 @@
 ﻿using OfficeOpenXml;
-using System.IO;
 
 namespace ExcelReader;
 
 public class ExcelReader
 {
-    public ExcelReader() 
-    { 
+    public ExcelReader()
+    {
 
     }
 
@@ -31,7 +30,7 @@ public class ExcelReader
         var columns = new List<string>();
 
         using ExcelPackage package = new(fileInfo);
-        
+
         // Get the first worksheet in the workbook
         ExcelWorksheet worksheet = package.Workbook.Worksheets[worksheetIndex];
 
@@ -44,7 +43,7 @@ public class ExcelReader
         {
             columns.Add(worksheet.Cells[row, col].Text);
         }
-        
+
 
         return columns;
     }
@@ -67,7 +66,7 @@ public class ExcelReader
             int colCount = worksheet.Dimension.Columns;
             int rowCount = worksheet.Dimension.Rows;
 
-            for(int row = 2; row <= rowCount; row++)
+            for (int row = 2; row <= rowCount; row++)
             {
                 // Loop through the columns of the first row
                 for (int col = 1; col <= colCount; col++)
